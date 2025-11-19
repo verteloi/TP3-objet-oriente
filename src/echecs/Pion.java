@@ -2,7 +2,7 @@ package echecs;
 
 public class Pion extends Piece{
     public Pion(Couleur couleur) {
-        super(Type.PION, couleur);
+        super(Type.PION, couleur); // couleur
     }
 
     @Override

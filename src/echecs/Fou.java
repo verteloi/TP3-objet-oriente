@@ -7,6 +7,7 @@ public class Fou extends Piece{
 
     @Override
     public boolean estValide(Position depart, Position arrivee) {
+
         return false;
     }
 }

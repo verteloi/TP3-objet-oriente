@@ -46,7 +46,7 @@ package echecs;
      public abstract boolean estValide (Position depart, Position arrivee);
 
      public boolean positionValide(Position arrivee) {
-         if (arrivee.getLigne() <= 0 || arrivee.getColonne() <= 0 || arrivee.getLigne() >= 7 || arrivee.getColonne() >= 7) {
+         if (arrivee.getLigne() <= 0 || arrivee.getColonne() <= 0 || arrivee.getLigne() >= 8 || arrivee.getColonne() >= 8) {
              return false;
          }
          return true;

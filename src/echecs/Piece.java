@@ -1,10 +1,8 @@
 package echecs;
- public abstract class Piece {
-     public enum Couleur {
-         NOIR,
-         BLANC
-     }
 
+import java.awt.geom.Point2D;
+
+public abstract class Piece {
      public enum Type {
          PION,
          FOU,
@@ -42,15 +40,21 @@ package echecs;
         return Math.pow((depart.getLigne()-arrivee.getLigne()), 2)+ Math.pow((depart.getColonne() - arrivee.getColonne()),2);
      }
 
-     /* méthode abstraite à implémenter dans chacune des sous-classes */
-     public abstract boolean estValide (Position depart, Position arrivee);
-
-     public boolean positionValide(Position arrivee) {
-         if (arrivee.getLigne() <= 0 || arrivee.getColonne() <= 0 || arrivee.getLigne() >= 8 || arrivee.getColonne() >= 8) {
-             return false;
-         }
-         return true;
+     public boolean estSurEchiquier(Position depart, Position arrivee) {
+         return depart.getColonne() >= 0 && depart.getColonne() <= 7 &&
+                 depart.getLigne() >= 0 && depart.getLigne() <= 7 &&
+                 arrivee.getColonne() >= 0 && arrivee.getColonne() <= 7 &&
+                 arrivee.getLigne() >= 0 && arrivee.getLigne() <= 7;
      }
+
+    public boolean estValide(Position depart, Position arrivee) {
+        if (!estSurEchiquier(depart, arrivee)) {
+            return false;
+        }
+        return estValideSpecifique(depart, arrivee);
+    }
+
+    protected abstract boolean estValideSpecifique (Position depart, Position arrivee);
  }
 
 

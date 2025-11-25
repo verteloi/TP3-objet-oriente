@@ -6,32 +6,29 @@ public class Pion extends Piece{
     }
 
     @Override
-    public boolean estValide(Position depart, Position arrivee) {
+    public boolean estValideSpecifique(Position depart, Position arrivee) {
         int differenceLigne = Math.abs(arrivee.getLigne() - depart.getLigne());
         int differenceColonne = Math.abs(arrivee.getColonne() - depart.getColonne());
-
-        if (positionValide(arrivee)) {
-            if (getCouleur() == Couleur.NOIR) {
-                if (arrivee.getLigne() > depart.getLigne()) {
-                    if (depart.getLigne() == 2) {
-                        if (differenceLigne <= 2 && differenceColonne == 0) {
-                            return true;
-                        }
-                    }
-                    else if (differenceLigne == 1 && differenceColonne == 0) {
+        if (getCouleur() == Couleur.NOIR) {
+            if (arrivee.getLigne() > depart.getLigne()) {
+                if (depart.getLigne() == 1) {
+                    if (differenceLigne <= 2 && differenceColonne == 0) {
                         return true;
                     }
                 }
-            } else {
-                if (arrivee.getLigne() < depart.getLigne()) {
-                    if (depart.getLigne() == 2) {
-                        if (differenceLigne <= 2 && differenceColonne == 0) {
-                            return true;
-                        }
-                    }
-                    else if (differenceLigne == 1 && differenceColonne == 0) {
+                else if (differenceLigne == 1 && differenceColonne == 0) {
+                    return true;
+                }
+            }
+        } else {
+            if (arrivee.getLigne() < depart.getLigne()) {
+                if (depart.getLigne() == 6) {
+                    if (differenceLigne <= 2 && differenceColonne == 0) {
                         return true;
                     }
+                }
+                else if (differenceLigne == 1 && differenceColonne == 0) {
+                    return true;
                 }
             }
         }

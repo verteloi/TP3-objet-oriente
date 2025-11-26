@@ -21,4 +21,13 @@ public class Reine extends Piece{
             }
         return false;
     }
+
+    // etapes:
+    // check si le deplacement est valide selon la piece --> si oui
+    //      si deplacement invalide -> false
+    //  check si il y a deja une piece sur l'arrive
+    //      si c'est une case de meme couleur -> invalide
+    //      si c'est une case differente couleur -> valide
+
+
 }

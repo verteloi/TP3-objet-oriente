@@ -39,4 +39,8 @@ public class Echiquier {
             location[6][i].setPiece(new Pion(Couleur.BLANC));
         }
     }
+
+    public Case getCase(int rangee,int colonne) {
+        return location[rangee][colonne];
+    }
 }

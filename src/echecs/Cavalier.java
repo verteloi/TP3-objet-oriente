@@ -1,6 +1,6 @@
 package echecs;
 
-public class Cavalier extends Piece{
+public class Cavalier extends Piece {
     public Cavalier(Couleur couleur) {
         super(Type.CAVALIER, couleur);
     }

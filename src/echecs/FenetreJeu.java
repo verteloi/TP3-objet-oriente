@@ -19,6 +19,7 @@ import java.awt.event.*;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 public class FenetreJeu extends JFrame {
     private Echiquier e;        //echiquier
@@ -81,11 +82,26 @@ public class FenetreJeu extends JFrame {
                 tab[i][j].addMouseListener(gest);  // ajouter l'�couteur aux sources
 
                 // 1. attribuer couleur aux JLabels
-
+                if ((i+j) % 2 == 0) {
+                    tab[i][j].setBackground(Color.lightGray);
+                } else {
+                    tab[i][j].setBackground(Color.darkGray);
+                }
             }
         }
 
         //2. deux nouveaux panels pour les pièces capturées
+        panelNoir = new JPanel(new FlowLayout());
+        panelNoir.setBackground(new Color(5,5,5,160));
+        this.getContentPane().add(panelNoir);
+        panelNoir.setBounds(new Rectangle(572, 65, 100, 465));
+        panelNoir.setBorder(new LineBorder(new Color(0,0, 0), 2, true));
+
+        panelBlanc = new JPanel(new FlowLayout());
+        panelBlanc.setBackground(new Color(200,200,200,160));
+        this.getContentPane().add(panelBlanc);
+        panelBlanc.setBounds(new Rectangle(680, 65, 100, 465));
+        panelBlanc.setBorder(new LineBorder(new Color(0,0, 0), 2, true));
     }
     // classe interne privée pour la gestion d'évènements
     private class GestionnaireEvenement extends MouseAdapter {
@@ -101,13 +117,38 @@ public class FenetreJeu extends JFrame {
         public void mouseReleased(MouseEvent eve) {
             // si on clique sur le bouton débuter
             if (eve.getSource() == boutonDebuter) {
+                e.debuter();
+                tab[0][0].setIcon(new ImageIcon("Icones\\TN.gif"));
+                tab[1][0].setIcon(new ImageIcon("Icones\\CN.gif"));
+                tab[2][0].setIcon(new ImageIcon("Icones\\FN.gif"));
+                tab[3][0].setIcon(new ImageIcon("Icones\\DN.gif"));
+                tab[4][1].setIcon(new ImageIcon("Icones\\RN.gif"));
+                tab[5][1].setIcon(new ImageIcon("Icones\\FN.gif"));
+                tab[6][1].setIcon(new ImageIcon("Icones\\CN.gif"));
+                tab[7][1].setIcon(new ImageIcon("Icones\\TN.gif"));
+
+                tab[0][6].setIcon(new ImageIcon("Icones\\TB.gif"));
+                tab[1][6].setIcon(new ImageIcon("Icones\\CB.gif"));
+                tab[2][6].setIcon(new ImageIcon("Icones\\FB.gif"));
+                tab[3][6].setIcon(new ImageIcon("Icones\\DB.gif"));
+                tab[4][7].setIcon(new ImageIcon("Icones\\RB.gif"));
+                tab[5][7].setIcon(new ImageIcon("Icones\\FB.gif"));
+                tab[6][7].setIcon(new ImageIcon("Icones\\CB.gif"));
+                tab[7][7].setIcon(new ImageIcon("Icones\\TN.gif"));
+
+
+
+
+
                 // 3.quoi faire ?
                 // attribuer les icones aux JLabels
                 champTexte.setText("C'est aux " + couleurControle.toString().toLowerCase() + "s à jouer ");
+
             }
 
             // si on clique sur le bouton reset
             else if (eve.getSource() == boutonReset) {
+                System.out.println("Bouton reset");
                 //4. votre travail
             } else { // donc on a cliqué sur un JLabel
                 for (int i = 0; i < 8; i++) {
@@ -115,6 +156,7 @@ public class FenetreJeu extends JFrame {
                         if (eve.getSource() == tab[i][j]) {
                             ligneClic = i;
                             colonneClic = j;
+                            System.out.println("clic (" + i + "," + j + ")");
                         }
                     }
                 }

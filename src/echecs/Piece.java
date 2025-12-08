@@ -48,6 +48,8 @@ public abstract class Piece {
      }
 
     public boolean estValide(Position depart, Position arrivee) {
+
+
         if (!estSurEchiquier(depart, arrivee)) {
             return false;
         }

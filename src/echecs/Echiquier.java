@@ -1,6 +1,6 @@
 package echecs;
 
-public class Echiquier {
+public class Echiquier implements MethodesEchiquier {
     private Case[][] location;
 
     public Echiquier() {
@@ -74,13 +74,19 @@ public class Echiquier {
             pasColonne = -1;
         }
 
-        if (depart.equals(arrivee)) return true;
+        if (depart.getLigne() == arrivee.getLigne() && depart.getColonne() == arrivee.getColonne()) {
+            return true;
+        }
 
-        if (!pieceDepart.estValide(depart, arrivee)) return false;
+        if (!pieceDepart.estValide(depart, arrivee)) {
+            return false;
+        }
 
         if (pieceArrivee != null) {
-            if (pieceDepart.getCouleur() == pieceArrivee.getCouleur()) return false;
+            if (pieceDepart.getCouleur() == pieceArrivee.getCouleur()) {
+                return false;
             }
+        }
 
         switch(pieceDepart.getType()) {
             case ROI:
@@ -88,12 +94,12 @@ public class Echiquier {
             case CAVALIER:
                 return true;
             case TOUR:
-                int distanceTour = Math.abs(diffLigne) + Math.abs(diffColonne);
-                for (int i = 1; i < distanceTour; i++) {
-                    int courantLigne = depart.getLigne() + (i * pasLigne);
-                    int courantColonne = depart.getColonne() + (i * pasColonne);
+                int nbPasTour = diffLigne + diffColonne;
+                for (int i = 1; i < nbPasTour; i++) {
+                    int posCouranteLigne = depart.getLigne() + (i * pasLigne);
+                    int posCouranteColonne = depart.getColonne() + (i * pasColonne);
 
-                    Position positionCourante = new Position(courantLigne, courantColonne);
+                    Position positionCourante = new Position(posCouranteLigne, posCouranteColonne);
 
                     if (getPiece(positionCourante) != null) {
                         return false;
@@ -102,13 +108,13 @@ public class Echiquier {
                 return true;
 
             case FOU:
-                int distanceFou = Math.abs(diffLigne);
+                int nbPasFou = diffLigne;
 
-                for (int i = 1; i < distanceFou; i++) {
-                    int courantLigne = depart.getLigne() + (i * pasLigne);
-                    int courantColonne = depart.getColonne() + (i * pasColonne);
+                for (int i = 1; i < nbPasFou; i++) {
+                    int posCouranteLigne = depart.getLigne() + (i * pasLigne);
+                    int posCouranteColonne = depart.getColonne() + (i * pasColonne);
 
-                    Position positionCourante = new Position(courantLigne, courantColonne);
+                    Position positionCourante = new Position(posCouranteLigne, posCouranteColonne);
 
                     if (getPiece(positionCourante) != null) {
                         return false;
@@ -117,13 +123,18 @@ public class Echiquier {
                 return true;
 
             case REINE:
-                int distanceReine = Math.max(Math.abs(diffLigne), Math.abs(diffColonne));
+                int nbPasReine;
+                if (Math.abs(diffLigne) > Math.abs(diffColonne)) {
+                    nbPasReine = Math.abs(diffLigne);
+                } else {
+                    nbPasReine = Math.abs(diffColonne);
+                }
 
-                for (int i = 1; i < distanceReine; i++) {
-                    int courantLigne = depart.getLigne() + (i * pasLigne);
-                    int courantColonne = depart.getColonne() + (i * pasColonne);
+                for (int i = 1; i < nbPasReine; i++) {
+                    int posCouranteLigne = depart.getLigne() + (i * pasLigne);
+                    int posCouranteColonne = depart.getColonne() + (i * pasColonne);
 
-                    Position positionCourante = new Position(courantLigne, courantColonne);
+                    Position positionCourante = new Position(posCouranteLigne, posCouranteColonne);
 
                     if (getPiece(positionCourante) != null) {
                         return false;
@@ -133,10 +144,14 @@ public class Echiquier {
 
             case PION:
                 if (pieceDepart.getCouleur() == Couleur.NOIR) {
-                    if (diffLigne < 0) return false;
+                    if (diffLigne < 0) {
+                        return false;
+                    }
                 }
                 else if (pieceDepart.getCouleur() == Couleur.BLANC) {
-                    if (diffLigne > 0) return false;
+                    if (diffLigne > 0) {
+                        return false;
+                    }
                 }
 
                 if (diffColonne != 0) {
@@ -146,11 +161,11 @@ public class Echiquier {
                         return false;
                     }
 
-                    if (Math.abs(diffLigne) == 2) {
-                        int interLigne = depart.getLigne() + pasLigne;
-                        Position positionIntermediaire = new Position(interLigne, depart.getColonne());
+                    if (diffLigne == 2) {
+                        int unPasDirection = depart.getLigne() + pasLigne;
+                        Position positionMilieu = new Position(unPasDirection, depart.getColonne());
 
-                        if (getPiece(positionIntermediaire) != null) {
+                        if (getPiece(positionMilieu) != null) {
                             return false;
                         }
                     }
@@ -163,14 +178,23 @@ public class Echiquier {
     public boolean captureParUnPionPossible(Position depart, Position arrivee) {
         Piece pieceDepart = getPiece(depart);
         Piece pieceArrivee = getPiece(arrivee);
+        int diffLigne = arrivee.getLigne() - depart.getLigne();
 
         if (pieceArrivee == null) {
             return false;
         }
+
+        if (pieceDepart.getCouleur() == Couleur.NOIR && diffLigne < 0) {
+            return false;
+        }
+
+        if (pieceDepart.getCouleur() == Couleur.BLANC && diffLigne > 0) {
+            return false;
+        }
+
         if (pieceDepart.getCouleur() != pieceArrivee.getCouleur()) {
             return true;
         }
         return false;
     }
 }
-

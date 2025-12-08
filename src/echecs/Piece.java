@@ -56,27 +56,10 @@ public abstract class Piece {
 
     protected abstract boolean estValideSpecifique (Position depart, Position arrivee);
 
-//    protected abstract boolean cheminPossible(Position depart, Position arrivee, Echiquier echiquier);
 
-//    public int getDifferenceColonne(Position depart, Position arrivee) {
-//        int differenceColonne;
-//        return differenceColonne = arrivee.getColonne() - depart.getColonne();
-//    }
-//
-//    public int getDifferenceLigne(Position depart, Position arrivee) {
-//        int differenceLigne;
-//        return differenceLigne = arrivee.getLigne() - depart.getLigne();
-//    }
-//
-//    public int getDifferenceColonneAbs(Position depart, Position arrivee) {
-//        int differenceColonne;
-//        return differenceColonne = arrivee.getColonne() - depart.getColonne();
-//    }
-//
-//    public int getDifferenceLigneAbs(Position depart, Position arrivee) {
-//        int differenceLigne;
-//        return differenceLigne = arrivee.getLigne() - depart.getLigne();
-//    }
+    public boolean cheminPossible(Position depart, Position arrivee, Echiquier echiquier) {
+        return false;
+    }
 }
 
 

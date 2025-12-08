@@ -43,4 +43,134 @@ public class Echiquier {
     public Case getCase(int rangee,int colonne) {
         return location[rangee][colonne];
     }
+
+    public Piece getPiece(Position positionActuelle) {
+        int ligne = positionActuelle.getLigne();
+        int colonne = positionActuelle.getColonne();
+        return location[ligne][colonne].getPiece();
+    }
+
+    public boolean cheminPossible(Position depart, Position arrivee) {
+        Piece pieceDepart = location[depart.getLigne()][depart.getColonne()].getPiece();
+        Piece pieceArrivee = location[arrivee.getLigne()][arrivee.getColonne()].getPiece();
+        int diffLigne = arrivee.getLigne() - depart.getLigne();
+        int diffColonne = arrivee.getColonne() - depart.getColonne();
+
+        int pasLigne;
+        if (diffLigne == 0) {
+            pasLigne = 0;
+        } else if (diffLigne > 0) {
+            pasLigne = 1;
+        } else {
+            pasLigne = -1;
+        }
+
+        int pasColonne;
+        if (diffColonne == 0) {
+            pasColonne = 0;
+        } else if (diffColonne > 0) {
+            pasColonne = 1;
+        } else {
+            pasColonne = -1;
+        }
+
+        if (depart.equals(arrivee)) return true;
+
+        if (!pieceDepart.estValide(depart, arrivee)) return false;
+
+        if (pieceArrivee != null) {
+            if (pieceDepart.getCouleur() == pieceArrivee.getCouleur()) return false;
+            }
+
+        switch(pieceDepart.getType()) {
+            case ROI:
+                return true;
+            case CAVALIER:
+                return true;
+            case TOUR:
+                int distanceTour = Math.abs(diffLigne) + Math.abs(diffColonne);
+                for (int i = 1; i < distanceTour; i++) {
+                    int courantLigne = depart.getLigne() + (i * pasLigne);
+                    int courantColonne = depart.getColonne() + (i * pasColonne);
+
+                    Position positionCourante = new Position(courantLigne, courantColonne);
+
+                    if (getPiece(positionCourante) != null) {
+                        return false;
+                    }
+                }
+                return true;
+
+            case FOU:
+                int distanceFou = Math.abs(diffLigne);
+
+                for (int i = 1; i < distanceFou; i++) {
+                    int courantLigne = depart.getLigne() + (i * pasLigne);
+                    int courantColonne = depart.getColonne() + (i * pasColonne);
+
+                    Position positionCourante = new Position(courantLigne, courantColonne);
+
+                    if (getPiece(positionCourante) != null) {
+                        return false;
+                    }
+                }
+                return true;
+
+            case REINE:
+                int distanceReine = Math.max(Math.abs(diffLigne), Math.abs(diffColonne));
+
+                for (int i = 1; i < distanceReine; i++) {
+                    int courantLigne = depart.getLigne() + (i * pasLigne);
+                    int courantColonne = depart.getColonne() + (i * pasColonne);
+
+                    Position positionCourante = new Position(courantLigne, courantColonne);
+
+                    if (getPiece(positionCourante) != null) {
+                        return false;
+                    }
+                }
+                return true;
+
+            case PION:
+                if (pieceDepart.getCouleur() == Couleur.NOIR) {
+                    if (diffLigne < 0) return false;
+                }
+                else if (pieceDepart.getCouleur() == Couleur.BLANC) {
+                    if (diffLigne > 0) return false;
+                }
+
+                if (diffColonne != 0) {
+                    return captureParUnPionPossible(depart, arrivee);
+                } else {
+                    if (pieceArrivee != null) {
+                        return false;
+                    }
+
+                    if (Math.abs(diffLigne) == 2) {
+                        int interLigne = depart.getLigne() + pasLigne;
+                        Position positionIntermediaire = new Position(interLigne, depart.getColonne());
+
+                        if (getPiece(positionIntermediaire) != null) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    public boolean captureParUnPionPossible(Position depart, Position arrivee) {
+        Piece pieceDepart = getPiece(depart);
+        Piece pieceArrivee = getPiece(arrivee);
+
+        if (pieceArrivee == null) {
+            return false;
+        }
+        if (pieceDepart.getCouleur() != pieceArrivee.getCouleur()) {
+            return true;
+        }
+        return false;
+    }
 }
+

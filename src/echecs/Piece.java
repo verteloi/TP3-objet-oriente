@@ -62,8 +62,12 @@ public abstract class Piece {
     public boolean cheminPossible(Position depart, Position arrivee, Echiquier echiquier) {
         return false;
     }
-}
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName().substring(0,2) + " " + getCouleur().name().substring(0,1);
+    }
+}
 
 
 

@@ -32,7 +32,7 @@ public class Echiquier implements MethodesEchiquier {
         location[7][7].setPiece(new Tour(Couleur.BLANC));
 
         for (int i = 0; i <= 7; i++) {
-            location[2][i].setPiece(new Pion(Couleur.NOIR));
+            location[1][i].setPiece(new Pion(Couleur.NOIR));
         }
 
         for (int i = 0; i <= 7; i++) {
@@ -196,5 +196,21 @@ public class Echiquier implements MethodesEchiquier {
             return true;
         }
         return false;
+    }
+
+
+    public String toString() {
+        String temp = "";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(getCase(i,j).getPiece() != null) {
+                    temp += "[" + getCase(i,j).getPiece().toString() + "]";
+                } else {
+                    temp += "[    ]";
+                }
+            }
+            temp += "\n";
+        }
+        return temp;
     }
 }

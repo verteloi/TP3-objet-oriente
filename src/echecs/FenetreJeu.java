@@ -119,26 +119,27 @@ public class FenetreJeu extends JFrame {
             if (eve.getSource() == boutonDebuter) {
                 e.debuter();
                 tab[0][0].setIcon(new ImageIcon("Icones\\TN.gif"));
-                tab[1][0].setIcon(new ImageIcon("Icones\\CN.gif"));
-                tab[2][0].setIcon(new ImageIcon("Icones\\FN.gif"));
-                tab[3][0].setIcon(new ImageIcon("Icones\\DN.gif"));
-                tab[4][1].setIcon(new ImageIcon("Icones\\RN.gif"));
-                tab[5][1].setIcon(new ImageIcon("Icones\\FN.gif"));
-                tab[6][1].setIcon(new ImageIcon("Icones\\CN.gif"));
-                tab[7][1].setIcon(new ImageIcon("Icones\\TN.gif"));
+                tab[0][1].setIcon(new ImageIcon("Icones\\CN.gif"));
+                tab[0][2].setIcon(new ImageIcon("Icones\\FN.gif"));
+                tab[0][3].setIcon(new ImageIcon("Icones\\DN.gif"));
+                tab[0][4].setIcon(new ImageIcon("Icones\\RN.gif"));
+                tab[0][5].setIcon(new ImageIcon("Icones\\FN.gif"));
+                tab[0][6].setIcon(new ImageIcon("Icones\\CN.gif"));
+                tab[0][7].setIcon(new ImageIcon("Icones\\TN.gif"));
 
-                tab[0][6].setIcon(new ImageIcon("Icones\\TB.gif"));
-                tab[1][6].setIcon(new ImageIcon("Icones\\CB.gif"));
-                tab[2][6].setIcon(new ImageIcon("Icones\\FB.gif"));
-                tab[3][6].setIcon(new ImageIcon("Icones\\DB.gif"));
-                tab[4][7].setIcon(new ImageIcon("Icones\\RB.gif"));
-                tab[5][7].setIcon(new ImageIcon("Icones\\FB.gif"));
-                tab[6][7].setIcon(new ImageIcon("Icones\\CB.gif"));
+                tab[7][0].setIcon(new ImageIcon("Icones\\TB.gif"));
+                tab[7][1].setIcon(new ImageIcon("Icones\\CB.gif"));
+                tab[7][2].setIcon(new ImageIcon("Icones\\FB.gif"));
+                tab[7][3].setIcon(new ImageIcon("Icones\\DB.gif"));
+                tab[7][4].setIcon(new ImageIcon("Icones\\RB.gif"));
+                tab[7][5].setIcon(new ImageIcon("Icones\\FB.gif"));
+                tab[7][6].setIcon(new ImageIcon("Icones\\CB.gif"));
                 tab[7][7].setIcon(new ImageIcon("Icones\\TN.gif"));
 
-
-
-
+                for (int i = 0; i <= 7; i++) {
+                    tab[6][i].setIcon(new ImageIcon("Icones\\PB.gif"));
+                    tab[1][i].setIcon(new ImageIcon("Icones\\PN.gif"));
+                }
 
                 // 3.quoi faire ?
                 // attribuer les icones aux JLabels
@@ -157,10 +158,26 @@ public class FenetreJeu extends JFrame {
                             ligneClic = i;
                             colonneClic = j;
                             System.out.println("clic (" + i + "," + j + ")");
+                            System.out.println(e);
                         }
                     }
                 }
                 //5. votre travail
+
+                // cas 1
+                if(e.getCase(ligneClic, colonneClic).caseOccupe(couleurControle) && pieceTampon == null) {
+                    // initialer position de depart
+                    depart = new Position(ligneClic, colonneClic);
+                    // prendre icone et mettre dans le tampon, prendre piece et mettre dans tampon
+                    iconeTampon= (ImageIcon)tab[ligneClic][colonneClic].getIcon();
+                    pieceTampon = e.getCase(ligneClic, colonneClic).getPiece();
+                    // retirer icone du board visible
+                    tab[ligneClic][colonneClic].setIcon(null);
+                }
+
+                // cas 2
+
+
 
             } // du grand else
 

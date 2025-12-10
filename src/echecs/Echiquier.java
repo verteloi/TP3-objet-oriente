@@ -1,5 +1,7 @@
 package echecs;
 
+import javax.swing.*;
+
 public class Echiquier implements MethodesEchiquier {
     private Case[][] location;
 
@@ -37,6 +39,12 @@ public class Echiquier implements MethodesEchiquier {
 
         for (int i = 0; i <= 7; i++) {
             location[6][i].setPiece(new Pion(Couleur.BLANC));
+        }
+
+        for (int i = 0; i <= 7; i++) {
+            for (int y = 2; y <= 5; y++) {
+                location[y][i].setPiece(null);
+            }
         }
     }
 

@@ -163,6 +163,7 @@ public class Echiquier implements MethodesEchiquier {
                 }
 
                 if (diffColonne != 0) {
+                    System.out.println("dadaw");
                     return captureParUnPionPossible(depart, arrivee);
                 } else {
                     if (pieceArrivee != null) {
@@ -187,6 +188,7 @@ public class Echiquier implements MethodesEchiquier {
         Piece pieceDepart = getPiece(depart);
         Piece pieceArrivee = getPiece(arrivee);
         int diffLigne = arrivee.getLigne() - depart.getLigne();
+        int diffColonne = arrivee.getColonne() - depart.getColonne();
 
         if (pieceArrivee == null) {
             return false;
@@ -197,6 +199,14 @@ public class Echiquier implements MethodesEchiquier {
         }
 
         if (pieceDepart.getCouleur() == Couleur.BLANC && diffLigne > 0) {
+            return false;
+        }
+
+        if (Math.abs(diffLigne) != 1) {
+            return false;
+        }
+
+        if (Math.abs(diffColonne) != 1) {
             return false;
         }
 

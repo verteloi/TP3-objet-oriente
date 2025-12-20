@@ -106,7 +106,16 @@ public class FenetreJeu extends JFrame {
     // classe interne privée pour la gestion d'évènements
     private class GestionnaireEvenement extends MouseAdapter {
 
-        // panelNoir.add(new JLabel(tab[ligneClic][colonneClic].getIcon()));
+        private void viderPanel(JPanel panel) {
+            Component[] components = panel.getComponents();
+            for (int i = components.length - 1; i >= 0; i--) {
+                if (components[i] instanceof JLabel) {
+                    panel.remove(i);
+                }
+            }
+            panel.revalidate();
+            panel.repaint();
+        }
 
         Piece pieceTampon;
         ImageIcon iconeTampon;
@@ -119,6 +128,8 @@ public class FenetreJeu extends JFrame {
         public void mouseReleased(MouseEvent eve) {
             // si on clique sur le bouton débuter
             if (eve.getSource() == boutonDebuter) {
+                viderPanel(panelNoir);
+                viderPanel(panelBlanc);
                 e.debuter();
                 tab[0][0].setIcon(new ImageIcon("Icones\\TN.gif"));
                 tab[0][1].setIcon(new ImageIcon("Icones\\CN.gif"));
@@ -158,6 +169,8 @@ public class FenetreJeu extends JFrame {
 
             // si on clique sur le bouton reset
             else if (eve.getSource() == boutonReset) {
+                viderPanel(panelNoir);
+                viderPanel(panelBlanc);
                 System.out.println("Bouton reset");
                 e.debuter();
                 tab[0][0].setIcon(new ImageIcon("Icones\\TN.gif"));
@@ -206,14 +219,12 @@ public class FenetreJeu extends JFrame {
                 //5. votre travail
 
                 // cas 1
-                if(e.getCase(ligneClic, colonneClic).caseOccupe(couleurControle) && pieceTampon == null) {
-                    // initialer position de depart
+                if (e.getCase(ligneClic, colonneClic).caseOccupe(couleurControle) && pieceTampon == null) {
                     depart = new Position(ligneClic, colonneClic);
-                    // prendre icone et mettre dans le tampon, prendre piece et mettre dans tampon
                     iconeTampon= (ImageIcon)tab[ligneClic][colonneClic].getIcon();
                     pieceTampon = e.getCase(ligneClic, colonneClic).getPiece();
-                    // retirer icone du board visible
                     tab[ligneClic][colonneClic].setIcon(null);
+
                 } else if (!e.getCase(ligneClic, colonneClic).caseOccupe() && pieceTampon != null) {
                     arrivee = new Position(ligneClic, colonneClic);
                     if (e.cheminPossible(depart,arrivee)) {
@@ -223,18 +234,68 @@ public class FenetreJeu extends JFrame {
                         pieceTampon = null;
                         couleurControle = couleurControle == Couleur.BLANC ? Couleur.NOIR: Couleur.BLANC;
                         champTexte.setText("C'est aux " + couleurControle.toString().toLowerCase() + "s à jouer ");
+
+                    } else {
+                        tab[depart.getLigne()][depart.getColonne()].setIcon(iconeTampon);
+                        pieceTampon = null;
                     }
+
                 } else if (e.getCase(ligneClic, colonneClic).caseOccupe() && pieceTampon != null) {
+                    arrivee = new Position(ligneClic, colonneClic);
+                    Piece pieceEnlever = e.getCase(ligneClic, colonneClic).getPiece();
+                    if (ligneClic == depart.getLigne() && colonneClic == depart.getColonne()) {
+                        tab[ligneClic][colonneClic].setIcon(iconeTampon);
+                        pieceTampon = null;
 
+                    } else if (pieceTampon instanceof Pion) {
+                        if (colonneClic == depart.getColonne()) {
+                            tab[depart.getLigne()][depart.getColonne()].setIcon(iconeTampon);
+                            pieceTampon = null;
+
+                        } else if (e.captureParUnPionPossible(depart, arrivee)) {
+                            if (pieceEnlever.getCouleur() == Couleur.NOIR) {
+                                JLabel captureLabel = new JLabel(tab[ligneClic][colonneClic].getIcon());
+                                panelBlanc.add(captureLabel);
+                            } else {
+                                JLabel captureLabel = new JLabel(tab[ligneClic][colonneClic].getIcon());
+                                panelNoir.add(captureLabel);
+                            }
+
+                            tab[ligneClic][colonneClic].setIcon(iconeTampon);
+                            e.getCase(ligneClic, colonneClic).setPiece(pieceTampon);
+                            e.getCase(depart.getLigne(), depart.getColonne()).setPiece(null);
+                            pieceTampon = null;
+                            couleurControle = couleurControle == Couleur.BLANC ? Couleur.NOIR : Couleur.BLANC;
+                            champTexte.setText("C'est aux " + couleurControle.toString().toLowerCase() + "s à jouer ");
+                        }
+                    } else if (e.cheminPossible(depart, arrivee)) {
+                        if (pieceEnlever.getCouleur() == Couleur.NOIR) {
+                            JLabel captureLabel = new JLabel(tab[ligneClic][colonneClic].getIcon());
+                            panelBlanc.add(captureLabel);
+                        } else {
+                            JLabel captureLabel = new JLabel(tab[ligneClic][colonneClic].getIcon());
+                            panelNoir.add(captureLabel);
+                        }
+
+                        tab[ligneClic][colonneClic].setIcon(iconeTampon);
+                        e.getCase(ligneClic, colonneClic).setPiece(pieceTampon);
+                        e.getCase(depart.getLigne(), depart.getColonne()).setPiece(null);
+                        pieceTampon = null;
+                        couleurControle = couleurControle == Couleur.BLANC ? Couleur.NOIR: Couleur.BLANC;
+                        champTexte.setText("C'est aux " + couleurControle.toString().toLowerCase() + "s à jouer ");
+
+                        if (pieceEnlever instanceof Roi) {
+                            champTexte.setText("LES " + couleurControle.toString() + " ONT GAGNÉ LA PARTIE!!");
+                        }
+
+                    } else {
+                        tab[depart.getLigne()][depart.getColonne()].setIcon(iconeTampon);
+                        pieceTampon = null;
+                    }
                 }
-
                 System.out.println(e);
-
-                // cas 2
-
-
-
             } // du grand else
+            SwingUtilities.updateComponentTreeUI(FenetreJeu.this);
 
         } // de la méthode mouseReleased
 
